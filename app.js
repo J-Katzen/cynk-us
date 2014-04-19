@@ -8,7 +8,7 @@ var express         =   require('express'),
     http            =   require('http');
 
 var app     =   express();
-var server  =   app.listen(3000);
+var server  =   app.listen(5000);
 
 // Tells socket.io to user our express server
 var io      =   require('socket.io').listen(server);
