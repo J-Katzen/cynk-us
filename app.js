@@ -8,7 +8,7 @@ var express         =   require('express'),
     http            =   require('http');
 
 var app     =   express();
-var server  =   app.listen(5000);
+var server  =   app.listen(process.env.PORT || 5000);
 
 // Tells socket.io to user our express server
 var io      =   require('socket.io').listen(server);
@@ -63,4 +63,4 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-console.log("Kwaku server listening on port 3000")
+console.log("Kwaku server listening on port 5000");
