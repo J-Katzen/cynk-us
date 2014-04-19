@@ -8,6 +8,8 @@ var express         =   require('express'),
     methodOverride  =   require('method-override'),
     http            =   require('http');
 
+mongoose.connect(process.env.MONGOHQ_URL || 'mongodb://localhost/cynkus');
+
 var app     =   express();
 var server  =   app.listen(process.env.PORT || 5000);
 var Establishment = require('./models/establishment');
