@@ -1,6 +1,7 @@
 var express         =   require('express'),
     favicon         =   require('static-favicon'),
     logger          =   require('morgan'),
+    mongoose        =   require('mongoose'),
     bodyParser      =   require('body-parser'),
     cookieParser    =   require('cookie-parser'),
     routes          =   require('./routes'),
@@ -9,6 +10,9 @@ var express         =   require('express'),
 
 var app     =   express();
 var server  =   app.listen(process.env.PORT || 5000);
+var Establishment = require('./models/establishment');
+var DailyFeed = require('./models/dailyfeed');
+var Message = require('./models/message');
 
 // Tells socket.io to user our express server
 var io      =   require('socket.io').listen(server);
