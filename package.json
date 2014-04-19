@@ -15,5 +15,19 @@
     "debug": "~0.7.4",
     "jade": "~1.3.0",
     "socket.io": "latest"
-  }
+  },
+  "description": "This is a socket test",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git@heroku.com:mighty-dawn-2122.git"
+  },
+  "keywords": [
+    "socket",
+    "test",
+    "heroku"
+  ],
+  "author": "kwaku farkye",
+  "license": "ISC"
 }
