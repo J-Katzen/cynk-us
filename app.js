@@ -69,12 +69,16 @@ stream.subscribe({
 });
 
 stream.on('new', function(response, body) {
-    console.log('processing new media...: ' + String(body.data.length));
-    (body.data).forEach(function(media){
+    var jsonBody = JSON.parse(body);
+    var jsonData = jsonBody.data;
+    console.log(jsonData);
+    console.log('processing new media...: ' + String(jsonData.length));
+    jsonData.forEach(function(media){
         if(media.type === "image"){
             var est = null,
                 message = null,
                 todayFeed = null,
+                messageQuery = null,
                 feedQuery = null,
                 today = new Date();
 
@@ -104,32 +108,40 @@ stream.on('new', function(response, body) {
                 }
             });
 
-            message = new Message({
-                dailyFeed: todayFeed.id,
-                created: Date.now(),
-                userpic: media.user.profile_picture,
-                hashtags: media.tags,
-                userInstaId: media.user.id,
-                username: media.user.username,
-                type: media.type,
-                link: media.link,
-                standard: media.images.standard_resolution,
-                thumb: media.images.thumbnail,
-                instagramId: media.id,
-                geoloc: {
-                    longitude: media.location.longitude,
-                    latitude: media.location.latitude
+            messageQuery = Message.findOne({'instagramId': media.id});
+            messageQuery.exec(function(err, msg){
+                if(err) return handleError(err);
+                if(!msg){
+                    var newMsg = new Message({
+                        dailyFeed: todayFeed.id,
+                        created: Date.now(),
+                        userpic: media.user.profile_picture,
+                        hashtags: media.tags,
+                        userInstaId: media.user.id,
+                        username: media.user.username,
+                        type: media.type,
+                        link: media.link,
+                        standard: media.images.standard_resolution,
+                        thumb: media.images.thumbnail,
+                        instagramId: media.id,
+                        geoloc: {
+                            longitude: media.location.longitude,
+                            latitude: media.location.latitude
+                        }
+                    });
+                    if(est !== null)
+                        newMsg.set('establishment', est.id);
+                    if(media.caption !== null)
+                        newMsg.set('message', media.caption.text);
+                    newMsg.save();
+                    message = newMsg;
+                } else {
+                    message = msg;
                 }
             });
-            if(est !== null)
-                message.set('establishment', est.id);
-            if(media.caption !== null)
-                message.set('message', media.caption.text);
-            message.save();
-
         }
     });
-    console.log(body);
+    
 });
 
 stream.on('new/error', function(response, body) {
