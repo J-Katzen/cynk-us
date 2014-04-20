@@ -46,8 +46,20 @@ stream.subscribe({ location : 1438 });
 stream.subscribe({ location : 213863948 });
 stream.subscribe({ location : 215620527 });
 
+//stream.subscribe({ location : 214139311 });
+//stream.subscribe({ location : 258180411 });
+//stream.subscribe({ location : 13216121 });
+//stream.subscribe({ location : 47125 });
+//stream.subscribe({ location : 7908534 });
+//stream.subscribe({ location : 5616777 });
+//stream.subscribe({ location : 75697550 });
+//stream.subscribe({ location : 1438 });
+//stream.subscribe({ location : 213863948 });
+//stream.subscribe({ location : 215620527 });
+
 //stream.subscribe({ tag: 'blahblah' });
-stream.subscribe({ tag: 'goodnight'});
+stream.subscribe({ tag: 'sfnight' });
+
 //stream.subscribe({ tag: 'yoo' });
 
 // Subscribe to SF Geography (max radius)
