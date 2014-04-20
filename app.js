@@ -77,7 +77,6 @@ stream.on('new', function(response, body) {
     jsonData.forEach(function(media){
         if(media.type === "image"){
             var est = null,
-                message = null,
                 todayFeed = null,
                 messageQuery = null,
                 feedQuery = null,
@@ -89,23 +88,29 @@ stream.on('new', function(response, body) {
                     if(err) return handleError(err);
                     if(!establishment){
                         var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
-                        newEst.save();
-                        est = newEst;
+                        newEst.save(function(err,establ){
+                            est = establ.id;
+                        });
                     } else {
-                        est = establishment;
+                        est = establishment.id;
                     }
                 });
             }
             today.setHours(6,0,0,0);
-            feedQuery = DailyFeed.findOne({'created': {"$gte": today, "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
+            if(today > new Date()){
+                feedQuery = DailyFeed.findOne({'created': {"$gte": new Date(today.getTime() - (24 * 60 * 60 * 1000)), "$lt": today} });
+            } else {
+                feedQuery = DailyFeed.findOne({'created': {"$gte": today, "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
+            }
             feedQuery.exec(function(err, feed){
                 if(err) return handleError(err);
                 if(!feed){
                     var newFeed = new DailyFeed({messages: [], created: Date.now() });
-                    newFeed.save();
-                    todayFeed = newFeed;
+                    newFeed.save(function(err,feed){
+                        todayFeed = feed.id;
+                    });
                 } else {
-                    todayFeed = feed;
+                    todayFeed = feed.id;
                 }
             });
 
@@ -114,8 +119,8 @@ stream.on('new', function(response, body) {
                 if(err) return handleError(err);
                 if(!msg){
                     var newMsg = new Message({
-                        dailyFeed: todayFeed.id,
-                        created: Date.now(),
+                        dailyFeed: todayFeed,
+                        created: (media.created_time * 1000),
                         userpic: media.user.profile_picture,
                         hashtags: media.tags,
                         userInstaId: media.user.id,
@@ -131,18 +136,15 @@ stream.on('new', function(response, body) {
                         }
                     });
                     if(est !== null)
-                        newMsg.set('establishment', est.id);
+                        newMsg.set('establishment', est);
                     if(media.caption !== null)
                         newMsg.set('message', media.caption.text);
                     newMsg.save();
-                    message = newMsg;
-                } else {
-                    message = msg;
                 }
             });
         }
     });
-    
+    console.log('parsed. :O!');
 });
 
 stream.on('new/error', function(response, body) {
