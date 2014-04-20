@@ -8,8 +8,15 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/handleuth', function(req, res) {
+router.post('/', function(req, res) {
+  console.log('Post to Root');
+  console.log(req);
+  consolel.lof('Response is: ')
+  console.log(res);
+});
+
+router.get('/handleauth', function(req, res) {
   console.log("Authorization Instagram");
-})
+});
 
 module.exports = router;
