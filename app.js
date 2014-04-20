@@ -43,7 +43,7 @@ stream.on('new/error', function(response, body) {
 })
 
 stream.on('subscribe', function(response, body) {
-    console.log("Subscribed to tag on Instagram");
+    console.log("Subscribed on Instagram");
 });
 
 stream.on('subscribe/error', function (error, response, body) {
@@ -51,8 +51,8 @@ stream.on('subscribe/error', function (error, response, body) {
 });
 
 stream.subscribe({ 
-    lat: -122.325114, 
-    lng: 37.564391,
+    lat: 37.730, 
+    lng: -122.515,
     radius: 1000,
 });
 
