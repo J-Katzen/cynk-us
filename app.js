@@ -35,8 +35,9 @@ var stream = InstagramStream(
 );
 
 // Subscribe to some things
-stream.subscribe({ location : 1257528 });
-// stream.subscribe({  location : })
+stream.subscribe({ location : 214139311 });
+
+// Subscribe to SF Geography
 stream.subscribe({ 
     lat: 37.760, 
     lng: -122.43953,
@@ -44,6 +45,65 @@ stream.subscribe({
 });
 
 stream.on('new', function(response, body) {
+    console.log('processing new media...: ' + String(body.data.length));
+    (body.data).forEach(function(media){
+        if(media.type === "image"){
+            var est = null,
+                msg = null,
+                todayFeed = null;
+
+            if(media.location && media.location.id){
+                var estQuery = Establishment.findOne({'instagramId': media.location.id });
+                estQuery.exec(function(err, establishment){
+                    if(err) return handleError(err);
+                    if(!establishment){
+                        var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
+                        newEst.save();
+                        est = newEst;
+                    } else {
+                        est = establishment;
+                    }
+                });
+            }
+            var today = new Date();
+            today.setHours(6,0,0,0);
+            var feedQuery = DailyFeed.findOne({'created': {"$gte": today, "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
+            feedQuery.exec(err, feed){
+                if(err) return handleError(err);
+                if(!feed){
+                    var newFeed = new DailyFeed({messages: [], created: Date.now() });
+                    newFeed.save();
+                    todayFeed = newFeed;
+                } else {
+                    todayFeed = feed;
+                }
+            }
+
+            var msg = new Message({
+                dailyFeed: todayFeed.id,
+                created: Date.now(),
+                userpic: media.user.profile_picture,
+                hashtags: media.tags,
+                userInstaId: media.user.id,
+                username: media.user.username,
+                type: media.type,
+                link: media.link,
+                standard: media.images.standard_resolution,
+                thumb: media.images.thumbnail,
+                instagramId: media.id,
+                geoloc: {
+                    longitude: media.location.longitude,
+                    latitude: media.location.latitude
+                }
+            });
+            if(est !== null)
+                msg.set('establishment', est.id);
+            if(media.caption !== null)
+                msg.set('message', media.caption.text);
+            msg.save();
+
+        }
+    });
     console.log(body);
 });
 
@@ -61,6 +121,7 @@ stream.on('subscribe/error', function (error, response, body) {
 
 stream.on('unsubscribe', function(response, body) {
     console.log("Unsubscribed, so resubscribe");
+    stream.subscribe({ location : 214139311 });
     stream.subscribe({ 
         lat: 37.760, 
         lng: -122.43953,
