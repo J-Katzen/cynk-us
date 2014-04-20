@@ -68,11 +68,7 @@ stream.subscribe({
     radius: 5000
 });
 
-stream.on('new', function(response, body) {
-    var jsonBody = JSON.parse(body);
-    var jsonData = jsonBody.data;
-    console.log(jsonData);
-    console.log('processing new media...: ' + String(jsonData.length));
+function handleStreamingMessages(jsonData){
     jsonData.forEach(function(media){
         if(media.type === "image"){
             var est = null,
@@ -138,11 +134,21 @@ stream.on('new', function(response, body) {
                         newMsg.set('establishment', est);
                     if(media.caption !== null)
                         newMsg.set('message', media.caption.text);
-                    newMsg.save();
+                    newMsg.save(function(err,savedMsg){
+                        console.log(savedMsg);
+                    });
                 }
             });
         }
     });
+};
+
+stream.on('new', function(response, body) {
+    var jsonBody = JSON.parse(body);
+    var jsonData = jsonBody.data;
+    console.log(jsonData);
+    console.log('processing new media...: ' + String(jsonData.length));
+    handleStreamingMessages(jsonData);
     console.log('parsed. :O!');
 });
 
