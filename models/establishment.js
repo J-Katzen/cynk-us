@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var establishmentSchema = mongoose.Schema({
     name:   String,
     instagramId: String,
-    latitude: Number ,
+    latitude: Number,
     longitude: Number
 });
 

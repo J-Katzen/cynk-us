@@ -1,5 +1,5 @@
 {
-  "name": "socket-test",
+  "name": "cync",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -23,7 +23,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git@heroku.com:mighty-dawn-2122.git"
+    "url": "git@heroku.com:cync-us.git"
   },
   "keywords": [
     "socket",

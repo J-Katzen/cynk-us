@@ -69,11 +69,67 @@ stream.subscribe({
 });
 
 stream.on('new', function(response, body) {
-    console.log("New Media\n\n\n");
-    // TODO: Parse body
-    // TODO: Add records to model
-    console.log("\n\n" + body + "\n\n");
-    console.log("end of new media\n\n\n");
+    console.log('processing new media...: ' + String(body.data.length));
+    (body.data).forEach(function(media){
+        if(media.type === "image"){
+            var est = null,
+                message = null,
+                todayFeed = null,
+                feedQuery = null,
+                today = new Date();
+
+            if(media.location && media.location.id){
+                var estQuery = Establishment.findOne({'instagramId': media.location.id });
+                estQuery.exec(function(err, establishment){
+                    if(err) return handleError(err);
+                    if(!establishment){
+                        var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
+                        newEst.save();
+                        est = newEst;
+                    } else {
+                        est = establishment;
+                    }
+                });
+            }
+            today.setHours(6,0,0,0);
+            feedQuery = DailyFeed.findOne({'created': {"$gte": today, "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
+            feedQuery.exec(function(err, feed){
+                if(err) return handleError(err);
+                if(!feed){
+                    var newFeed = new DailyFeed({messages: [], created: Date.now() });
+                    newFeed.save();
+                    todayFeed = newFeed;
+                } else {
+                    todayFeed = feed;
+                }
+            });
+
+            message = new Message({
+                dailyFeed: todayFeed.id,
+                created: Date.now(),
+                userpic: media.user.profile_picture,
+                hashtags: media.tags,
+                userInstaId: media.user.id,
+                username: media.user.username,
+                type: media.type,
+                link: media.link,
+                standard: media.images.standard_resolution,
+                thumb: media.images.thumbnail,
+                instagramId: media.id,
+                geoloc: {
+                    longitude: media.location.longitude,
+                    latitude: media.location.latitude
+                }
+            });
+            if(est !== null)
+                message.set('establishment', est.id);
+            if(media.caption !== null)
+                message.set('message', media.caption.text);
+            message.save();
+
+        }
+    });
+    console.log(body);
 });
 
 stream.on('new/error', function(response, body) {

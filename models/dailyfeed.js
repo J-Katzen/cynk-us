@@ -3,7 +3,6 @@ var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var dailyFeedSchema = mongoose.Schema({
     messages:   [{type: ObjectId, ref: 'Message'}],
-    establishment: {type: ObjectId, ref: 'Establishment'},
     created: Date
 });
 
