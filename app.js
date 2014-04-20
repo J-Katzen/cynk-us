@@ -35,8 +35,9 @@ var stream = InstagramStream(
 );
 
 // Subscribe to some things
-stream.subscribe({ location : 1257528 });
-// stream.subscribe({  location : })
+stream.subscribe({ location : 214139311 });
+
+// Subscribe to SF Geography
 stream.subscribe({ 
     lat: 37.760, 
     lng: -122.43953,
@@ -47,7 +48,8 @@ stream.on('new', function(response, body) {
     console.log("New Media");
     // TODO: Parse body
     // TODO: Add records to model
-    console.log(body); 
+    console.log(body);
+    console.log("end of new media");
 });
 
 stream.on('new/error', function(response, body) {
