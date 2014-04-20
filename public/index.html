@@ -4,7 +4,7 @@
 <head>
 <!-- Latest compiled and minified JavaScript -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css' rel='stylesheet' />
+<link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7.1/leaflet.css">
 </head>
 
 <body ng-controller="cyncController">
@@ -16,8 +16,8 @@
                 <!-- roulette and shit -->
             </div>
             <div class="col-md-11 col-xs-12">
-                <div id="map-container" style="position:fixed;top:0;left:80px;bottom:0;right:0;">
-                </div>
+                <leaflet style="position:fixed;top:0;left:80px;bottom:0;right:0;" maxbounds="maxbounds" defaults="defaults">
+                </leaflet>
                 <!-- put the current orders -->
             </div>
         </div>
@@ -27,25 +27,16 @@
 
     <!-- javascript shit here -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-route.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-sanitize.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-animate.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js'></script>
     <script src="/socketio/socket.io.min.js"></script>
+    <script src="/directives/angular-leaflet-directive.min.js"></script>
     <script src="/controllers/cync.js"></script>
     <script src="/services/cyncsocket.js"></script>
     <script src="/app.js"></script>
-    <script>
-        // Create a map in the div #map
-        $(function(){
-            var map = L.mapbox.map('map-container', 'jkatzen.i19egpgn');
-            var southWest = L.latLng(37.730, -122.515),
-                northEast = L.latLng(37.8129, -122.382),
-                bounds = L.latLngBounds(southWest, northEast);
-            map.fitBounds(bounds);
-        })
-    </script>
 </body>
 </html>

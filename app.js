@@ -21,24 +21,39 @@ var InstagramStream = require('instagram-realtime');
 // Tells socket.io to user our express server
 var io      =   require('socket.io').listen(server);
 
+console.log('Process Env:' + process.env);
+
 // Create instagram stream
 var stream = InstagramStream(
   server,
   {
-    client_id     : process.env.INSTAGRAM_API_ID,
-    client_secret : process.env.INSTAGRAM_API_SECRET,
-    url           : 'cynk-us.herokuapp.com',
-    callback_path : 'streaming'
+    client_id     : "491c67def4b64d5d939abf92e6733f30",
+    client_secret : "76d396a74a4c4e208c558a8640ec6118",
+    url           : 'http://cynk-us.herokuapp.com',
+    callback_path : 'handleauth'
   }
 );
+
+
+stream.on('subscribe', function(response, body) {
+    console.log("Subscribed to tag on Instagram");
+});
+
+stream.on('subscribe/error', function (error, response, body) {
+    console.log("Error" + body);
+});
+
+stream.subscribe({ tag: 'yolo'});
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(favicon());
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser());
+app.use(bodyParser.urlencoded());
 app.use(methodOverride());
+app.use('/', routes);
+app.use('/handleauth', routes)
+app.use(express.static(__dirname + '/public'));
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
@@ -74,7 +89,7 @@ app.use(function(err, req, res, next) {
 
 // SocketIO server
 io.sockets.on('connection', function(socket) {
-    // fill in with websocket and instagram streaming stuff
+
 });
 
 
