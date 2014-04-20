@@ -75,6 +75,11 @@ stream.on('subscribe/error', function (error, response, body) {
 stream.on('unsubscribe', function(response, body) {
     console.log("Unsubscribed, so resubscribe");
     stream.subscribe({ location : 214139311 });
+    stream.subscribe({ location : 258180411 });
+    stream.subscribe({ location : 13216121 });
+    stream.subscribe({ location : 47125 });
+    stream.subscribe({ location : 7908534 });
+    stream.subscribe({ location : 5616777 });
     stream.subscribe({ 
         lat: 37.760, 
         lng: -122.43953,
