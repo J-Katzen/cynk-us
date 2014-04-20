@@ -27,8 +27,8 @@ console.log('Process Env:' + process.env);
 var stream = InstagramStream(
   server,
   {
-    client_id     : "5f047ef10018465e954dd6bab19e1425",
-    client_secret : "186f97d2487648d180dd56819cceb283",
+    client_id     : "491c67def4b64d5d939abf92e6733f30",
+    client_secret : "76d396a74a4c4e208c558a8640ec6118",
     url           : 'http://cynk-us.herokuapp.com',
     callback_path : 'handleauth'
   }
