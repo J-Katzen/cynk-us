@@ -36,9 +36,14 @@ var stream = InstagramStream(
 
 // Subscribe to some things
 stream.subscribe({ location : 214139311 });
+stream.subscribe({ location : 258180411 });
+stream.subscribe({ location : 13216121 });
+stream.subscribe({ location : 47125 });
+stream.subscribe({ location : 7908534 });
+stream.subscribe({ location : 5616777 });
 
-stream.subscribe({ tag: 'blahblah' });
-stream.subscribe({ tag: 'yoo' });
+//stream.subscribe({ tag: 'blahblah' });
+//stream.subscribe({ tag: 'yoo' });
 
 // Subscribe to SF Geography
 stream.subscribe({ 
@@ -51,11 +56,7 @@ stream.on('new', function(response, body) {
     console.log("New Media\n\n\n");
     // TODO: Parse body
     // TODO: Add records to model
-    body.data.forEach(function(element, index, array) {
-        console.log("Tags: " + element.tags + "\n");
-        console.log("Created Time: " + element.created_time + "\n");
-        console.log("Type: " + element.type + "\n");
-    })
+    console.log("\n\n" + body + "\n\n");
     console.log("end of new media\n\n\n");
 });
 
