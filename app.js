@@ -37,6 +37,8 @@ var stream = InstagramStream(
 
 stream.on('subscribe', function(response, body) {
     console.log("Subscribed to tag on Instagram");
+    console.log(response);
+    console.log(body);
 });
 
 stream.on('subscribe/error', function (error, response, body) {
