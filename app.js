@@ -30,22 +30,24 @@ var stream = InstagramStream(
     client_id     : "491c67def4b64d5d939abf92e6733f30",
     client_secret : "76d396a74a4c4e208c558a8640ec6118",
     url           : 'http://cynk-us.herokuapp.com',
-    callback_path : 'handleauth'
+    callback_path : '/'
   }
 );
 
 
 stream.on('subscribe', function(response, body) {
     console.log("Subscribed to tag on Instagram");
-    console.log(response);
-    console.log(body);
 });
 
 stream.on('subscribe/error', function (error, response, body) {
     console.log("Error" + body);
 });
 
-stream.subscribe({ tag: 'yolo'});
+stream.subscribe({ 
+    lat: -122.325114, 
+    lng: 37.564391,
+    radius: 1000,
+});
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
