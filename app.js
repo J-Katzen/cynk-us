@@ -192,7 +192,6 @@ app.use(favicon());
 app.use(bodyParser.urlencoded());
 app.use(methodOverride());
 app.use('/', routes);
-app.use('/handleauth', routes);
 app.use('/dailyfeeds', routes);
 app.use(express.static(__dirname + '/public'));
 
