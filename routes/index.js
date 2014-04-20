@@ -17,12 +17,6 @@ router.get('/handleauth', function(req, res) {
   console.log("Authorization Instagram");
 });
 
-router.get('/subscription', function(req, res) {
-  console.log("Instagram Auth");
-  console.log(req);
-  console.log("Done");
-});
-
 router.post('/subscription', function(req, res) {
   console.log("Post to subscription");
 });
