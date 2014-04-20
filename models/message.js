@@ -13,7 +13,7 @@ var messageSchema = mongoose.Schema({
     type: String,
     link: String,
     thumb: String,
-    instagramId: String,
+    instagramId: {type: String, unique: true},
     geoloc: {
         longitude: {type: Number},
         latitude: {type: Number}

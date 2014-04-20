@@ -77,44 +77,48 @@ function handleStreamingMessages(jsonData){
                 feedQuery = null,
                 today = new Date();
 
-            if(media.location && media.location.id){
-                var estQuery = Establishment.findOne({'instagramId': media.location.id });
-                estQuery.exec(function(err, establishment){
-                    if(err) return handleError(err);
-                    if(!establishment){
-                        var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
-                        newEst.save(function(err,establ){
-                            est = establ.id;
-                        });
-                    } else {
-                        est = establishment.id;
-                    }
-                });
-            }
-            today.setHours(6,0,0,0);
-            if(today > new Date()){
-                feedQuery = DailyFeed.findOne({'created': {"$gte": new Date(today.getTime() - (24 * 60 * 60 * 1000)), "$lt": today} });
-            } else {
-                feedQuery = DailyFeed.findOne({'created': {"$gte": today, "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
-            }
-            feedQuery.exec(function(err, feed){
-                if(err) return handleError(err);
-                if(!feed){
-                    var newFeed = new DailyFeed({messages: [], created: Date.now() });
-                    newFeed.save(function(err,feed){
-                        todayFeed = feed.id;
-                    });
-                } else {
-                    todayFeed = feed.id;
-                }
-            });
+            // if(media.location && media.location.id){
+            //     var estQuery = Establishment.findOne({'instagramId': media.location.id });
+            //     estQuery.exec(function(err, establishment){
+            //         if(err) return handleError(err);
+            //         if(!establishment){
+            //             var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
+            //             newEst.save(function(err,establ){
+            //                 est = establ.id;
+            //             });
+            //         } else {
+            //             console.log('establishment: ' + establishment.id);
+            //             est = establishment.id;
+            //         }
+            //     });
+            // }
+            // today.setHours(6,0,0,0);
+            // if(today > new Date()){
+            //     feedQuery = DailyFeed.findOne({'created': {"$gte": new Date(today.getTime() - (24 * 60 * 60 * 1000)), "$lt": today} });
+            //     console.log('before 6am');
+            // } else {
+            //     feedQuery = DailyFeed.findOne({'created': {"$gte": today.getTime(), "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
+            //     console.log('after 6am');
+            // }
+            // feedQuery.exec(function(err, feed){
+            //     if(err) return handleError(err);
+            //     if(!feed){
+            //         var newFeed = new DailyFeed({messages: [], created: Date.now() });
+            //         newFeed.save(function(err,feed){
+            //             todayFeed = feed.id;
+            //         });
+            //     } else {
+            //         console.log('feed: ' + feed.id);
+            //         todayFeed = feed.id;
+            //     }
+            // });
 
             messageQuery = Message.findOne({'instagramId': media.id});
             messageQuery.exec(function(err, msg){
                 if(err) return handleError(err);
                 if(!msg){
                     var newMsg = new Message({
-                        dailyFeed: todayFeed,
+                        // dailyFeed: todayFeed,
                         created: (media.created_time * 1000),
                         userpic: media.user.profile_picture,
                         hashtags: media.tags,
@@ -135,6 +139,7 @@ function handleStreamingMessages(jsonData){
                     if(media.caption !== null)
                         newMsg.set('message', media.caption.text);
                     newMsg.save(function(err,savedMsg){
+                        if(err) return handleError(err);
                         console.log(savedMsg);
                     });
                 }
