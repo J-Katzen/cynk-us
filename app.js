@@ -36,6 +36,8 @@ var stream = InstagramStream(
 
 stream.on('new', function(response, body) {
     console.log("New Media");
+    // TODO: Parse body
+    // TODO: Add records to model 
 });
 
 stream.on('new/error', function(response, body) {
