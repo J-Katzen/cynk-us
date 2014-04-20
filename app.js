@@ -45,7 +45,7 @@ stream.subscribe({ location : 5616777 });
 //stream.subscribe({ tag: 'blahblah' });
 //stream.subscribe({ tag: 'yoo' });
 
-// Subscribe to SF Geography
+// Subscribe to SF Geography (max radius)
 stream.subscribe({ 
     lat: 37.760, 
     lng: -122.43953,
