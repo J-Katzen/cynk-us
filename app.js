@@ -51,7 +51,11 @@ stream.on('new', function(response, body) {
     console.log("New Media\n\n\n");
     // TODO: Parse body
     // TODO: Add records to model
-    console.log(body);
+    body.data.forEach(function(element, index, array) {
+        console.log("Tags: " + element.tags + "\n");
+        console.log("Created Time: " + element.created_time + "\n");
+        console.log("Type: " + element.type + "\n");
+    })
     console.log("end of new media\n\n\n");
 });
 
