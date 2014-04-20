@@ -37,7 +37,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(favicon());
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded());
+app.use(bodyParser());
 app.use(methodOverride());
 
 /// catch 404 and forwarding to error handler
