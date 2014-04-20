@@ -34,6 +34,15 @@ var stream = InstagramStream(
   }
 );
 
+// Subscribe to some things
+stream.subscribe({ location : 1257528 });
+// stream.subscribe({  location : })
+stream.subscribe({ 
+    lat: 37.760, 
+    lng: -122.43953,
+    radius: 5000
+});
+
 stream.on('new', function(response, body) {
     console.log("New Media");
     // TODO: Parse body
@@ -62,15 +71,11 @@ stream.on('unsubscribe', function(response, body) {
     });    
 })
 
-// Subscribe to some things
-stream.subscribe({ location : 1397968933 });
 
-stream.subscribe({ 
-    lat: 37.760, 
-    lng: -122.43953,
-    radius: 5000
+// SocketIO server
+io.sockets.on('connection', function(socket) {
+    // fill in with websocket and instagram streaming stuff
 });
-
 
 
 app.set('views', __dirname + '/views');
@@ -113,13 +118,6 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-
-// SocketIO server
-io.sockets.on('connection', function(socket) {
-    // fill in with websocket and instagram streaming stuff
-});
-
 
 module.exports = app;
 
