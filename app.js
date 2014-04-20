@@ -37,7 +37,8 @@ var stream = InstagramStream(
 stream.on('new', function(response, body) {
     console.log("New Media");
     // TODO: Parse body
-    // TODO: Add records to model 
+    // TODO: Add records to model
+    console.log(body); 
 });
 
 stream.on('new/error', function(response, body) {
@@ -61,15 +62,16 @@ stream.on('unsubscribe', function(response, body) {
     });    
 })
 
-stream.subscribe({
-    tag: 'blahblah'
-});
+// Subscribe to some things
+stream.subscribe({ location : 1397968933 });
 
 stream.subscribe({ 
     lat: 37.760, 
     lng: -122.43953,
     radius: 5000
 });
+
+
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
