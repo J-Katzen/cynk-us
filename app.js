@@ -19,22 +19,15 @@ var Message = require('./models/message');
 // Tells socket.io to user our express server
 var io      =   require('socket.io').listen(server);
 
-function helloF(req, res, next) {
-    console.log("Here!!");
-    next();
-}
-
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
-
-app.use(favicon());
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(methodOverride());
-app.use(cookieParser());
-app.use('/', routes);
-app.use(express.static(__dirname + '/public'));
+app.configure(function(){
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(logger('dev'));
+    app.use(favicon());
+    app.use(express.static(__dirname + '/public'));
+    app.use(urlencoded());
+    app.use(methodOverride());
+});
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
@@ -66,6 +59,37 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+function instagramListener(){
+
+};
+
+
+// SocketIO server
+io.sockets.on('connection', function(socket) {
+    socket.on('picture:new', function(order) {
+        console.log(order);
+        var nimage = new ({stripe: order.stripe_id,
+                              name: order.name,
+                              note: order.note});
+        nord.save();
+        console.log(nord);
+        socket.broadcast.emit('order:new', nord);
+    });
+
+    socket.on('order:update', function(order) {
+        console.log(order);
+        socket.broadcast.emit('order:update', order);
+    });
+
+    // socket.on('disconnect', function() {
+    //     socket.broadcast.to(socket.room).emit('blitz:chatmsg',
+    //         {msg: socket.user_name + ' has disconnected!'});
+    //     socket.leave(socket.room);
+    // });
+
+});
+
 
 module.exports = app;
 
