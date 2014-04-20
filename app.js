@@ -32,15 +32,13 @@ var stream = InstagramStream(
   }
 );
 
-app.configure(function(){
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.use(logger('dev'));
-    app.use(favicon());
-    app.use(express.static(__dirname + '/public'));
-    app.use(urlencoded());
-    app.use(methodOverride());
-});
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.use(logger('dev'));
+app.use(favicon());
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded());
+app.use(methodOverride());
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
