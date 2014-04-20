@@ -50,10 +50,19 @@ stream.on('subscribe/error', function (error, response, body) {
     console.log("Error" + body);
 });
 
+stream.on('unsubscribe', function(response, body) {
+    console.log("Unsubscribed, so resubscribe");
+    stream.subscribe({ 
+        lat: 37.760, 
+        lng: -122.43953,
+        radius: 5000
+    });    
+})
+
 stream.subscribe({ 
-    lat: 37.730, 
-    lng: -122.515,
-    radius: 1000,
+    lat: 37.760, 
+    lng: -122.43953,
+    radius: 5000
 });
 
 app.set('views', __dirname + '/views');
