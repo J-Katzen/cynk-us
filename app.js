@@ -37,6 +37,9 @@ var stream = InstagramStream(
 // Subscribe to some things
 stream.subscribe({ location : 214139311 });
 
+stream.subscribe({ tag: 'blahblah' });
+stream.subscribe({ tag: 'yoo' });
+
 // Subscribe to SF Geography
 stream.subscribe({ 
     lat: 37.760, 
