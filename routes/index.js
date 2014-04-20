@@ -17,4 +17,8 @@ router.get('/handleauth', function(req, res) {
   console.log("Authorization Instagram");
 });
 
+router.post('/subscription', function(req, res) {
+  console.log("Post to subscription");
+})
+
 module.exports = router;

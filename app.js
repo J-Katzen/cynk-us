@@ -30,7 +30,7 @@ var stream = InstagramStream(
     client_id     : "491c67def4b64d5d939abf92e6733f30",
     client_secret : "76d396a74a4c4e208c558a8640ec6118",
     url           : 'http://cynk-us.herokuapp.com',
-    callback_path : '/'
+    callback_path : 'subscription'
   }
 );
 
@@ -42,7 +42,7 @@ stream.on('new', function(response, body) {
 
 stream.on('new/error', function(response, body) {
     console.log("New Media Error");
-})
+});
 
 stream.on('subscribe', function(response, body) {
     console.log("Subscribed on Instagram");
@@ -61,14 +61,14 @@ stream.on('unsubscribe', function(response, body) {
     });    
 })
 
+stream.subscribe({
+    tag: 'blahblah'
+});
+
 stream.subscribe({ 
     lat: 37.760, 
     lng: -122.43953,
     radius: 5000
-});
-
-stream.subscribe({
-    user: true
 });
 
 app.set('views', __dirname + '/views');
