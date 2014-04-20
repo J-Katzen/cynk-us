@@ -128,12 +128,10 @@ function handleStreamingMessages(jsonData){
                         link: media.link,
                         standard: media.images.standard_resolution,
                         thumb: media.images.thumbnail,
-                        instagramId: media.id,
-                        geoloc: {
-                            longitude: media.location.longitude,
-                            latitude: media.location.latitude
-                        }
+                        instagramId: media.id
                     });
+                    if(media.location !== null)
+                        newMsg.set('geoloc', {longitude: media.location.longitude, latitude: media.location.latitude});
                     if(est !== null)
                         newMsg.set('establishment', est);
                     if(media.caption !== null)
