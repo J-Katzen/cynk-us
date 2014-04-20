@@ -38,17 +38,17 @@ var stream = InstagramStream(
 stream.subscribe({ location : 214139311 });
 
 // Subscribe to SF Geography
-stream.subscribe({ 
-    lat: 37.760, 
-    lng: -122.43953,
-    radius: 5000
-});
+//stream.subscribe({ 
+//    lat: 37.760, 
+//    lng: -122.43953,
+//    radius: 5000
+//});
 
 stream.on('new', function(response, body) {
     console.log("New Media");
     // TODO: Parse body
     // TODO: Add records to model
-    console.log(body);
+    console.log(body.usernan);
     console.log("end of new media");
 });
 
@@ -66,11 +66,12 @@ stream.on('subscribe/error', function (error, response, body) {
 
 stream.on('unsubscribe', function(response, body) {
     console.log("Unsubscribed, so resubscribe");
-    stream.subscribe({ 
-        lat: 37.760, 
-        lng: -122.43953,
-        radius: 5000
-    });    
+    stream.subscribe({ location : 214139311 });
+    //stream.subscribe({ 
+    //    lat: 37.760, 
+    //    lng: -122.43953,
+    //    radius: 5000
+    //});    
 })
 
 
