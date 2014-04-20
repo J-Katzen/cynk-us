@@ -45,13 +45,12 @@ stream.subscribe({ location : 75697550 });
 stream.subscribe({ location : 1438 });
 stream.subscribe({ location : 213863948 });
 stream.subscribe({ location : 215620527 });
-
-//stream.subscribe({ location : 214139311 });
-//stream.subscribe({ location : 258180411 });
-//stream.subscribe({ location : 13216121 });
-//stream.subscribe({ location : 47125 });
-//stream.subscribe({ location : 7908534 });
-//stream.subscribe({ location : 5616777 });
+stream.subscribe({ location : 1333 }); // Smuggler's Cove
+stream.subscribe({ location : 82756577 }); // Smuggler's Cove mid floor
+stream.subscribe({ location : 5882549 }); // The Ice Cream Bar
+stream.subscribe({ location : 118516 }); // The Boardroom
+stream.subscribe({ location : 11945887 }); // Board Room
+stream.subscribe({ location : 5616777 });
 //stream.subscribe({ location : 75697550 });
 //stream.subscribe({ location : 1438 });
 //stream.subscribe({ location : 213863948 });
