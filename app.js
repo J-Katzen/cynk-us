@@ -70,6 +70,7 @@ stream.subscribe({
 });
 
 stream.on('new', function(response, body) {
+    console.log(body);
     console.log('processing new media...: ' + String(body.data.length));
     (body.data).forEach(function(media){
         if(media.type === "image"){
