@@ -164,11 +164,18 @@ stream.on('unsubscribe', function(response, body) {
     stream.subscribe({ location : 47125 });
     stream.subscribe({ location : 7908534 });
     stream.subscribe({ location : 5616777 });
-    stream.subscribe({ 
-        lat: 37.760, 
-        lng: -122.43953,
-        radius: 5000
-    });    
+    stream.subscribe({ location : 75697550 });
+    stream.subscribe({ location : 1438 });
+    stream.subscribe({ location : 213863948 });
+    stream.subscribe({ location : 215620527 });
+    stream.subscribe({ location : 1333 }); // Smuggler's Cove
+    stream.subscribe({ location : 82756577 }); // Smuggler's Cove mid floor
+    stream.subscribe({ location : 5882549 }); // The Ice Cream Bar
+    stream.subscribe({ location : 118516 }); // The Boardroom
+    stream.subscribe({ location : 11945887 }); // Board Room
+    stream.subscribe({ location : 365453 }); // Curly's Coffee Shop
+    stream.subscribe({ location : 795950 }); // Patxi's chicago pizza
+    stream.subscribe({ location : 1397980572 }); // Silver Cloud
 })
 
 
@@ -185,7 +192,8 @@ app.use(favicon());
 app.use(bodyParser.urlencoded());
 app.use(methodOverride());
 app.use('/', routes);
-app.use('/handleauth', routes)
+app.use('/handleauth', routes);
+app.use('/dailyfeeds', routes);
 app.use(express.static(__dirname + '/public'));
 
 /// catch 404 and forwarding to error handler
