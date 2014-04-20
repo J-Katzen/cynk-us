@@ -36,8 +36,33 @@ var stream = InstagramStream(
 
 // Subscribe to some things
 stream.subscribe({ location : 214139311 });
+stream.subscribe({ location : 258180411 });
+stream.subscribe({ location : 13216121 });
+stream.subscribe({ location : 47125 });
+stream.subscribe({ location : 7908534 });
+stream.subscribe({ location : 5616777 });
+stream.subscribe({ location : 75697550 });
+stream.subscribe({ location : 1438 });
+stream.subscribe({ location : 213863948 });
+stream.subscribe({ location : 215620527 });
 
-// Subscribe to SF Geography
+//stream.subscribe({ location : 214139311 });
+//stream.subscribe({ location : 258180411 });
+//stream.subscribe({ location : 13216121 });
+//stream.subscribe({ location : 47125 });
+//stream.subscribe({ location : 7908534 });
+//stream.subscribe({ location : 5616777 });
+//stream.subscribe({ location : 75697550 });
+//stream.subscribe({ location : 1438 });
+//stream.subscribe({ location : 213863948 });
+//stream.subscribe({ location : 215620527 });
+
+//stream.subscribe({ tag: 'blahblah' });
+stream.subscribe({ tag: 'sfnight' });
+
+//stream.subscribe({ tag: 'yoo' });
+
+// Subscribe to SF Geography (max radius)
 stream.subscribe({ 
     lat: 37.760, 
     lng: -122.43953,
@@ -49,8 +74,10 @@ stream.on('new', function(response, body) {
     (body.data).forEach(function(media){
         if(media.type === "image"){
             var est = null,
-                msg = null,
-                todayFeed = null;
+                message = null,
+                todayFeed = null,
+                feedQuery = null,
+                today = new Date();
 
             if(media.location && media.location.id){
                 var estQuery = Establishment.findOne({'instagramId': media.location.id });
@@ -65,10 +92,9 @@ stream.on('new', function(response, body) {
                     }
                 });
             }
-            var today = new Date();
             today.setHours(6,0,0,0);
-            var feedQuery = DailyFeed.findOne({'created': {"$gte": today, "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
-            feedQuery.exec(err, feed){
+            feedQuery = DailyFeed.findOne({'created': {"$gte": today, "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
+            feedQuery.exec(function(err, feed){
                 if(err) return handleError(err);
                 if(!feed){
                     var newFeed = new DailyFeed({messages: [], created: Date.now() });
@@ -77,9 +103,9 @@ stream.on('new', function(response, body) {
                 } else {
                     todayFeed = feed;
                 }
-            }
+            });
 
-            var msg = new Message({
+            message = new Message({
                 dailyFeed: todayFeed.id,
                 created: Date.now(),
                 userpic: media.user.profile_picture,
@@ -97,10 +123,10 @@ stream.on('new', function(response, body) {
                 }
             });
             if(est !== null)
-                msg.set('establishment', est.id);
+                message.set('establishment', est.id);
             if(media.caption !== null)
-                msg.set('message', media.caption.text);
-            msg.save();
+                message.set('message', media.caption.text);
+            message.save();
 
         }
     });
@@ -122,6 +148,11 @@ stream.on('subscribe/error', function (error, response, body) {
 stream.on('unsubscribe', function(response, body) {
     console.log("Unsubscribed, so resubscribe");
     stream.subscribe({ location : 214139311 });
+    stream.subscribe({ location : 258180411 });
+    stream.subscribe({ location : 13216121 });
+    stream.subscribe({ location : 47125 });
+    stream.subscribe({ location : 7908534 });
+    stream.subscribe({ location : 5616777 });
     stream.subscribe({ 
         lat: 37.760, 
         lng: -122.43953,
