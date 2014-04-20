@@ -4,15 +4,13 @@ var router    = express.Router();
 /* GET home page. */
 router.get('/', function(req, res) {
   console.log('Root URL');
-  console.log(res.body());
+  console.log(req.ip);
   res.render('index', { title: 'Express' });
 });
 
 router.post('/', function(req, res) {
   console.log('Post to Root');
-  console.log(req.body());
-  consolel.lof('Response is: ')
-  console.log(res.body());
+  console.log(req.ip);
 });
 
 router.get('/handleauth', function(req, res) {
