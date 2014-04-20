@@ -6,6 +6,7 @@ var express         =   require('express'),
     cookieParser    =   require('cookie-parser'),
     routes          =   require('./routes'),
     methodOverride  =   require('method-override'),
+    InstagramStream =   require('instagram-realtime'),
     http            =   require('http');
 
 mongoose.connect(process.env.MONGOHQ_URL || 'mongodb://localhost/cynkus');
@@ -15,9 +16,21 @@ var server  =   app.listen(process.env.PORT || 5000);
 var Establishment = require('./models/establishment');
 var DailyFeed = require('./models/dailyfeed');
 var Message = require('./models/message');
+var InstagramStream = require('instagram-realtime');
 
 // Tells socket.io to user our express server
 var io      =   require('socket.io').listen(server);
+
+// Create instagram stream
+var stream = InstagramStream(
+  server,
+  {
+    client_id     : process.env.INSTAGRAM_API_ID,
+    client_secret : process.env.INSTAGRAM_API_SECRET,
+    url           : 'cynk-us.herokuapp.com',
+    callback_path : 'streaming'
+  }
+);
 
 app.configure(function(){
     app.set('views', __dirname + '/views');
@@ -60,34 +73,10 @@ app.use(function(err, req, res, next) {
     });
 });
 
-function instagramListener(){
-
-};
-
 
 // SocketIO server
 io.sockets.on('connection', function(socket) {
-    socket.on('picture:new', function(order) {
-        console.log(order);
-        var nimage = new ({stripe: order.stripe_id,
-                              name: order.name,
-                              note: order.note});
-        nord.save();
-        console.log(nord);
-        socket.broadcast.emit('order:new', nord);
-    });
-
-    socket.on('order:update', function(order) {
-        console.log(order);
-        socket.broadcast.emit('order:update', order);
-    });
-
-    // socket.on('disconnect', function() {
-    //     socket.broadcast.to(socket.room).emit('blitz:chatmsg',
-    //         {msg: socket.user_name + ' has disconnected!'});
-    //     socket.leave(socket.room);
-    // });
-
+    // fill in with websocket and instagram streaming stuff
 });
 
 
