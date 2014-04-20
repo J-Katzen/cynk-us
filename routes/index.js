@@ -5,10 +5,16 @@ var router    = express.Router();
 router.get('/', function(req, res) {
   res.sendfile('./public/index.html');
   // res.render('index', { title: 'Express' });
+
 });
 
-router.get('/handleuth', function(req, res) {
+router.post('/', function(req, res) {
+  console.log('Post to Root');
+  console.log(req.ip);
+});
+
+router.get('/handleauth', function(req, res) {
   console.log("Authorization Instagram");
-})
+});
 
 module.exports = router;

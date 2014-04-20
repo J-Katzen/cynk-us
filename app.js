@@ -30,20 +30,50 @@ var stream = InstagramStream(
     client_id     : "491c67def4b64d5d939abf92e6733f30",
     client_secret : "76d396a74a4c4e208c558a8640ec6118",
     url           : 'http://cynk-us.herokuapp.com',
-    callback_path : 'handleauth'
+    callback_path : 'subscription'
   }
 );
 
+// Subscribe to some things
+stream.subscribe({ location : 1257528 });
+// stream.subscribe({  location : })
+stream.subscribe({ 
+    lat: 37.760, 
+    lng: -122.43953,
+    radius: 5000
+});
+
+stream.on('new', function(response, body) {
+    console.log(body);
+});
+
+stream.on('new/error', function(response, body) {
+    console.log("New Media Error");
+});
 
 stream.on('subscribe', function(response, body) {
-    console.log("Subscribed to tag on Instagram");
+    console.log("Subscribed on Instagram");
 });
 
 stream.on('subscribe/error', function (error, response, body) {
     console.log("Error" + body);
 });
 
-stream.subscribe({ tag: 'yolo'});
+stream.on('unsubscribe', function(response, body) {
+    console.log("Unsubscribed, so resubscribe");
+    stream.subscribe({ 
+        lat: 37.760, 
+        lng: -122.43953,
+        radius: 5000
+    });    
+})
+
+
+// SocketIO server
+io.sockets.on('connection', function(socket) {
+    // fill in with websocket and instagram streaming stuff
+});
+
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -85,13 +115,6 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-
-// SocketIO server
-io.sockets.on('connection', function(socket) {
-
-});
-
 
 module.exports = app;
 
