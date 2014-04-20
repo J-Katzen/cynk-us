@@ -34,6 +34,13 @@ var stream = InstagramStream(
   }
 );
 
+stream.on('new', function(response, body) {
+    console.log("New Media");
+});
+
+stream.on('new/error', function(response, body) {
+    console.log("New Media Error");
+})
 
 stream.on('subscribe', function(response, body) {
     console.log("Subscribed to tag on Instagram");
