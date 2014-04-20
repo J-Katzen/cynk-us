@@ -68,6 +68,19 @@ stream.subscribe({
     radius: 5000
 });
 
+var fqh = function feedQueryHandler(err, feed){
+    if(err) return handleError(err);
+    if(!feed){
+        var newFeed = new DailyFeed({messages: [], created: Date.now() });
+        newFeed.save(function(err,feed){
+            todayFeed = feed.id;
+        });
+    } else {
+        console.log('feed: ' + feed.id);
+        todayFeed = feed.id;
+    }
+}
+
 function handleStreamingMessages(jsonData){
     jsonData.forEach(function(media){
         if(media.type === "image"){
@@ -92,26 +105,17 @@ function handleStreamingMessages(jsonData){
             //         }
             //     });
             // }
-            // today.setHours(6,0,0,0);
-            // if(today > new Date()){
-            //     feedQuery = DailyFeed.findOne({'created': {"$gte": new Date(today.getTime() - (24 * 60 * 60 * 1000)), "$lt": today} });
-            //     console.log('before 6am');
-            // } else {
-            //     feedQuery = DailyFeed.findOne({'created': {"$gte": today.getTime(), "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
-            //     console.log('after 6am');
-            // }
-            // feedQuery.exec(function(err, feed){
-            //     if(err) return handleError(err);
-            //     if(!feed){
-            //         var newFeed = new DailyFeed({messages: [], created: Date.now() });
-            //         newFeed.save(function(err,feed){
-            //             todayFeed = feed.id;
-            //         });
-            //     } else {
-            //         console.log('feed: ' + feed.id);
-            //         todayFeed = feed.id;
-            //     }
-            // });
+            today.setHours(6,0,0,0);
+            if(today > new Date()){
+                feedQuery = DailyFeed.findOne({'created': {"$gte": new Date(today.getTime() - (24 * 60 * 60 * 1000)), "$lt": today} });
+                console.log('before 6am');
+            } else {
+                feedQuery = DailyFeed.findOne({'created': {"$gte": today.getTime(), "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
+                console.log('after 6am');
+            }
+            feedQuery.exec(fqh{
+                
+            });
 
             messageQuery = Message.findOne({'instagramId': media.id});
             messageQuery.exec(function(err, msg){
