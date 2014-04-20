@@ -67,6 +67,10 @@ stream.subscribe({
     radius: 5000
 });
 
+stream.subscribe({
+    user: true
+});
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(logger('dev'));
