@@ -105,6 +105,9 @@ var hsm = function handleStreamingMessages(jsonData){
                                         // return handleError(err);
                                     console.log(savedMsg);
                                 });
+                            } else {
+                                console.log('updates');
+                                Message.update({instagramId: media.id}, {standard: media.images.standard_resolution.url, thumb: media.images.thumbnail.url}).exec();
                             }
                             callback();
                         });
