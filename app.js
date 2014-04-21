@@ -69,7 +69,7 @@ stream.subscribe({
     radius: 5000
 });
 
-function handleStreamingMessages(jsonData){
+var hsm = function handleStreamingMessages(jsonData){
     var today = new Date(),
         feedQuery = null,
         feed = null;
@@ -155,15 +155,17 @@ function handleStreamingMessages(jsonData){
     ],
     function(err,results){
     });
-}
+    return 'hm';
+};
 
 stream.on('new', function(response, body) {
     var jsonBody = JSON.parse(body);
     var jsonData = jsonBody.data;
+    var tst = null;
     console.log(jsonData);
     console.log('processing new media...: ' + String(jsonData.length));
-    handleStreamingMessages(jsonData);
-    console.log('parsed. :O!');
+    tst = hsm(jsonData);
+    console.log('parsed. :O!: ' + tst);
 });
 
 stream.on('new/error', function(response, body) {
