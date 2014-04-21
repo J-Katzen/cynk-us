@@ -22,7 +22,7 @@ var hsm = function handleStreamingMessages(jsonData){
         function(callback){
             feedQuery.exec(function(err, feed){
                 if(err) {
-                 //handleError(err);   
+                    console.log(err);
                 }
                 if(!feed){
                     var newFeed = new DailyFeed({messages: [], created: Date.now() });
@@ -45,7 +45,9 @@ var hsm = function handleStreamingMessages(jsonData){
                         if(media.location && media.location.id){
                             var estQuery = Establishment.findOne({'instagramId': media.location.id });
                             estQuery.exec(function(err,establishment){
-                                if(err) {}
+                                if(err) {
+                                    console.log(err);
+                                }
                                     // return handleError(err);
                                 if(!establishment){
                                     var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
@@ -64,7 +66,9 @@ var hsm = function handleStreamingMessages(jsonData){
                     function(callback){
                         var msgQuery = Message.findOne({'instagramid': media.id});
                         msgQuery.exec(function(err, msg){
-                            if(err) {} 
+                            if(err) {
+                                console.log(err);
+                            } 
                                 // return handleError(err);
                             if(!msg){
                                 var newMsg = new Message({
@@ -79,16 +83,20 @@ var hsm = function handleStreamingMessages(jsonData){
                                 thumb: media.images.thumbnail,
                                 instagramId: media.id
                                 });
-                                if(todayfeed !== null)
+                                if(todayfeed)
                                     newMsg.set('dailyFeed', todayfeed);
-                                if(media.location !== null)
+                                if(media.location){
+                                    console.log(media.location);
                                     newMsg.set('geoloc', {longitude: media.location.longitude, latitude: media.location.latitude});
-                                if(est !== null)
+                                }
+                                if(est)
                                     newMsg.set('establishment', est);
                                 if(media.caption !== null)
                                     newMsg.set('message', media.caption.text);
                                 newMsg.save(function(err,savedMsg){
-                                    if(err) {} 
+                                    if(err) {
+                                        console.log(err);
+                                    } 
                                         // return handleError(err);
                                     console.log(savedMsg);
                                 });
@@ -124,6 +132,7 @@ function setStreamTriggers() {
 
     stream.on('new/error', function(response, body) {
         console.log("New Media Error");
+        console.log(body);
     });
 
     stream.on('subscribe', function(response, body) {
