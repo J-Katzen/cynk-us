@@ -82,7 +82,9 @@ var hsm = function handleStreamingMessages(jsonData){
     async.series([
         function(callback){
             feedQuery.exec(function(err, feed){
-                if(err) return handleError(err);
+                if(err) {
+                 //handleError(err);   
+                }
                 if(!feed){
                     var newFeed = new DailyFeed({messages: [], created: Date.now() });
                     newFeed.save(function(err, fd){
@@ -104,7 +106,8 @@ var hsm = function handleStreamingMessages(jsonData){
                         if(media.location && media.location.id){
                             var estQuery = Establishment.findOne({'instagramId': media.location.id });
                             estQuery.exec(function(err,establishment){
-                                if(err) return handleError(err);
+                                if(err) {}
+                                    // return handleError(err);
                                 if(!establishment){
                                     var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
                                     newEst.save(function(err,establ){
@@ -122,7 +125,8 @@ var hsm = function handleStreamingMessages(jsonData){
                     function(callback){
                         var msgQuery = Message.findOne({'instagramid': media.id});
                         msgQuery.exec(function(err, msg){
-                            if(err) return handleError(err);
+                            if(err) {} 
+                                // return handleError(err);
                             if(!msg){
                                 var newMsg = new Message({
                                 created: (media.created_time * 1000),
