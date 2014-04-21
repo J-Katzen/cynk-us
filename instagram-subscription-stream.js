@@ -23,6 +23,7 @@ var hsm = function handleStreamingMessages(jsonData){
             feedQuery.exec(function(err, feed){
                 if(err) {
                     console.log(err);
+                    callback();
                 }
                 if(!feed){
                     var newFeed = new DailyFeed({messages: [], created: Date.now() });
@@ -47,6 +48,7 @@ var hsm = function handleStreamingMessages(jsonData){
                             estQuery.exec(function(err,establishment){
                                 if(err) {
                                     console.log(err);
+                                    callback();
                                 }
                                     // return handleError(err);
                                 if(!establishment){
@@ -68,6 +70,7 @@ var hsm = function handleStreamingMessages(jsonData){
                         msgQuery.exec(function(err, msg){
                             if(err) {
                                 console.log(err);
+                                callback();
                             } 
                                 // return handleError(err);
                             if(!msg){
@@ -97,6 +100,7 @@ var hsm = function handleStreamingMessages(jsonData){
                                     if(err) {
                                         console.log(err);
                                         Message.update({instagramId: media.id}, {standard: media.images.standard_resolution.url, thumb: media.images.thumbnail.url}).exec();
+                                        callback();
                                     } 
                                         // return handleError(err);
                                     console.log(savedMsg);
