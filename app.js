@@ -23,11 +23,11 @@ var io      =   require('socket.io').listen(server);
 
 // Create instagram stream
 
-//instagramStream.initStream(server);
+instagramStream.initStream(server);
 //instagramStream.setTestVal(99);
 //console.log(instagramStream.getTestVal());
 
-igStreamer.initStream();
+//igStreamer.initStream();
 
 // SocketIO server
 io.sockets.on('connection', function(socket) {
@@ -78,5 +78,3 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 console.log("Kwaku server listening on port 5000");
-
-igStreamer.deleteAllSubscriptions();
