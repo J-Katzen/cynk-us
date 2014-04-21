@@ -7,6 +7,7 @@ var express         =   require('express'),
     routes          =   require('./routes'),
     methodOverride  =   require('method-override'),
     InstagramStream =   require('instagram-realtime'),
+    async           =   require('async'),
     http            =   require('http');
 
 mongoose.connect(process.env.MONGOHQ_URL || 'mongodb://localhost/cynkus');
@@ -68,87 +69,93 @@ stream.subscribe({
     radius: 5000
 });
 
-var fqh = function feedQueryHandler(err, feed){
-    if(err) return handleError(err);
-    if(!feed){
-        var newFeed = new DailyFeed({messages: [], created: Date.now() });
-        newFeed.save(function(err,feed){
-            todayFeed = feed.id;
-        });
-    } else {
-        console.log('feed: ' + feed.id);
-        todayFeed = feed.id;
-    }
-}
-
 function handleStreamingMessages(jsonData){
-    jsonData.forEach(function(media){
-        if(media.type === "image"){
-            var est = null,
-                todayFeed = null,
-                messageQuery = null,
-                feedQuery = null,
-                today = new Date();
-
-            // if(media.location && media.location.id){
-            //     var estQuery = Establishment.findOne({'instagramId': media.location.id });
-            //     estQuery.exec(function(err, establishment){
-            //         if(err) return handleError(err);
-            //         if(!establishment){
-            //             var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
-            //             newEst.save(function(err,establ){
-            //                 est = establ.id;
-            //             });
-            //         } else {
-            //             console.log('establishment: ' + establishment.id);
-            //             est = establishment.id;
-            //         }
-            //     });
-            // }
-            today.setHours(6,0,0,0);
-            if(today > new Date()){
-                feedQuery = DailyFeed.findOne({'created': {"$gte": new Date(today.getTime() - (24 * 60 * 60 * 1000)), "$lt": today} });
-                console.log('before 6am');
-            } else {
-                feedQuery = DailyFeed.findOne({'created': {"$gte": today.getTime(), "$lt": new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
-                console.log('after 6am');
-            }
-            feedQuery.exec(fqh{
-                
-            });
-
-            messageQuery = Message.findOne({'instagramId': media.id});
-            messageQuery.exec(function(err, msg){
+    var today = new Date(),
+        feedQuery = null,
+        feed = null;
+    today.setHours(6,0,0,0);
+    if(today > new Date()){
+        feedQuery = DailyFeed.findOne({'created': {"$gte": new Date(today.getTime() - (24 * 60 * 60 * 1000)), "$lt": today} });
+    } else {
+        feedQuery = DailyFeed.findOne({'created': {'$gte': today, '$lt': new Date(today.getTime() + (24 * 60 * 60 * 1000))} });
+    }
+    async.series([
+        function(callback){
+            feedQuery.exec(function(err, feed){
                 if(err) return handleError(err);
-                if(!msg){
-                    var newMsg = new Message({
-                        // dailyFeed: todayFeed,
-                        created: (media.created_time * 1000),
-                        userpic: media.user.profile_picture,
-                        hashtags: media.tags,
-                        userInstaId: media.user.id,
-                        username: media.user.username,
-                        type: media.type,
-                        link: media.link,
-                        standard: media.images.standard_resolution,
-                        thumb: media.images.thumbnail,
-                        instagramId: media.id
+                if(!feed){
+                    var newFeed = new DailyFeed({messages: [], created: Date.now() });
+                    newFeed.save(function(err, fd){
+                        feed = fd;
                     });
-                    if(media.location !== null)
-                        newMsg.set('geoloc', {longitude: media.location.longitude, latitude: media.location.latitude});
-                    if(est !== null)
-                        newMsg.set('establishment', est);
-                    if(media.caption !== null)
-                        newMsg.set('message', media.caption.text);
-                    newMsg.save(function(err,savedMsg){
-                        if(err) return handleError(err);
-                        console.log(savedMsg);
-                    });
+                } else {
+                    feed = fd;
                 }
+                callback();
+            });
+        },
+        function(callback){
+            jsonData.forEach(function(media){
+                var est = null;
+                async.series([
+                    function(callback){
+                        if(media.location && media.location.id){
+                            var estQuery = Establishment.findOne({'instagramId': media.location.id });
+                            estQuery.exec(function(err,establishment){
+                                if(err) return handleError(err);
+                                if(!establishment){
+                                    var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
+                                    newEst.save(function(err,establ){
+                                        est = establ;
+                                    });
+                                } else {
+                                    est = establishment;
+                                }
+                                callback();
+                            });
+                        }
+                    },
+                    function(callback){
+                        var msgQuery = Message.findOne({'instagramid': media.id});
+                        msgQuery.exec(function(err, msg){
+                            if(err) return handleError(err);
+                            if(!msg){
+                                var newMsg = new Message({
+                                dailyFeed: feed.id,
+                                created: (media.created_time * 1000),
+                                userpic: media.user.profile_picture,
+                                hashtags: media.tags,
+                                userInstaId: media.user.id,
+                                username: media.user.username,
+                                type: media.type,
+                                link: media.link,
+                                standard: media.images.standard_resolution,
+                                thumb: media.images.thumbnail,
+                                instagramId: media.id
+                                });
+                                if(media.location !== null)
+                                    newMsg.set('geoloc', {longitude: media.location.longitude, latitude: media.location.latitude});
+                                if(est !== null)
+                                    newMsg.set('establishment', est);
+                                if(media.caption !== null)
+                                    newMsg.set('message', media.caption.text);
+                                newMsg.save(function(err,savedMsg){
+                                    if(err) return handleError(err);
+                                    console.log(savedMsg);
+                                });
+                            }
+                            callback();
+                        });
+                    }
+                ],
+                function(err, results){
+                });
             });
         }
+    ],
+    function(err,results){
     });
-};
+}
 
 stream.on('new', function(response, body) {
     var jsonBody = JSON.parse(body);
