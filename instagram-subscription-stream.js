@@ -62,9 +62,9 @@ var hsm = function handleStreamingMessages(jsonData){
                                     est = establishment.id;
                                     console.log(est);
                                 }
-                                callback();
                             });
                         }
+                        callback();
                     },
                     function(callback){
                         var msgQuery = Message.findOne({'instagramid': media.id});
