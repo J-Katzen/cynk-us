@@ -86,9 +86,11 @@ var hsm = function handleStreamingMessages(jsonData){
                 if(!feed){
                     var newFeed = new DailyFeed({messages: [], created: Date.now() });
                     newFeed.save(function(err, fd){
+                        console.log(fd);
                         todayfeed = fd.id;
                     });
                 } else {
+                    console.log(feed);
                     todayfeed = feed.id;
                 }
                 callback();
@@ -107,9 +109,11 @@ var hsm = function handleStreamingMessages(jsonData){
                                     var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
                                     newEst.save(function(err,establ){
                                         est = establ.id;
+                                        console.log(est);
                                     });
                                 } else {
                                     est = establishment.id;
+                                    console.log(est);
                                 }
                                 callback();
                             });
@@ -121,7 +125,6 @@ var hsm = function handleStreamingMessages(jsonData){
                             if(err) return handleError(err);
                             if(!msg){
                                 var newMsg = new Message({
-                                dailyFeed: todayfeed,
                                 created: (media.created_time * 1000),
                                 userpic: media.user.profile_picture,
                                 hashtags: media.tags,
@@ -133,6 +136,8 @@ var hsm = function handleStreamingMessages(jsonData){
                                 thumb: media.images.thumbnail,
                                 instagramId: media.id
                                 });
+                                if(todayfeed !== null)
+                                    newMsg.set('dailyFeed', todayfeed);
                                 if(media.location !== null)
                                     newMsg.set('geoloc', {longitude: media.location.longitude, latitude: media.location.latitude});
                                 if(est !== null)
@@ -162,10 +167,8 @@ stream.on('new', function(response, body) {
     var jsonBody = JSON.parse(body);
     var jsonData = jsonBody.data;
     var tst = null;
-    console.log(jsonData);
     console.log('processing new media...: ' + String(jsonData.length));
     tst = hsm(jsonData);
-    console.log('parsed. :O!: ' + tst);
 });
 
 stream.on('new/error', function(response, body) {
