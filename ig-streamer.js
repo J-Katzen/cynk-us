@@ -13,8 +13,6 @@ exports.initStream = function initStream() {
 
   redirectUri = 'http://http://cynk-us.herokuapp.com/subscription';
 
-  exports.getSubscriptions;
-  exports.deleteAllSubscriptions;
 };
 
 // Get the subscriptions this stream has

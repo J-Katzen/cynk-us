@@ -78,3 +78,5 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 console.log("Kwaku server listening on port 5000");
+
+igStream.getSubscriptions();
