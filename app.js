@@ -178,6 +178,7 @@ stream.on('subscribe', function(response, body) {
 
 stream.on('subscribe/error', function (error, response, body) {
     console.log("Error" + body);
+    console.log("Error response: " + response);
 });
 
 stream.on('unsubscribe', function(response, body) {
