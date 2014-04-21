@@ -7,6 +7,7 @@ var express             =   require('express'),
     routes              =   require('./routes'),
     methodOverride      =   require('method-override'),
     instagramStream     =   require('./instagram-subscription-stream'),
+    igStreamer          =   require('./ig-streamer'),
     http                =   require('http');
 
 mongoose.connect(process.env.MONGOHQ_URL || 'mongodb://localhost/cynkus');
@@ -21,9 +22,12 @@ var Message         =   require('./models/message');
 var io      =   require('socket.io').listen(server);
 
 // Create instagram stream
-instagramStream.initStream(server);
-instagramStream.setTestVal(99);
-console.log(instagramStream.getTestVal());
+
+//instagramStream.initStream(server);
+//instagramStream.setTestVal(99);
+//console.log(instagramStream.getTestVal());
+
+igStreamer.initStream();
 
 // SocketIO server
 io.sockets.on('connection', function(socket) {

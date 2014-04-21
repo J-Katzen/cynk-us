@@ -3,7 +3,7 @@ var stream      =   require('instagram-node').instagram(),
 var redirectUri;
 
 // Initialize Instagram API Connection
-function initStream(){
+exports.initStream = function initStream() {
   
   // Set Instagram API Credentials
   stream.use({
@@ -13,7 +13,9 @@ function initStream(){
 
   redirectUri = 'http://http://cynk-us.herokuapp.com/subscription';
 
-}
+  exports.getSubscriptions;
+
+};
 
 // Get the subscriptions this stream has
 exports.getSubscriptions = stream.subscriptions(
