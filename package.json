@@ -17,6 +17,7 @@
     "socket.io": "latest",
     "mongoose": "3.8.8",
     "instagram-realtime": "0.0.4",
+    "instagram-node": "0.2.3",
     "async": "0.7.0"
   },
   "description": "This is a socket test",
