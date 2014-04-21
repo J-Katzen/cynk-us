@@ -39,8 +39,9 @@ var hsm = function handleStreamingMessages(jsonData){
             });
         },
         function(callback){
+            var est = null;
             jsonData.forEach(function(media){
-                var est = null;
+                est = null;
                 async.series([
                     function(callback){
                         if(media.location && media.location.id){
