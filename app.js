@@ -79,4 +79,4 @@ module.exports = app;
 
 console.log("Kwaku server listening on port 5000");
 
-igStreamer.getSubscriptions();
+igStreamer.getSubscriptions;

@@ -16,7 +16,8 @@ exports.initStream = function initStream() {
 };
 
 // Get the subscriptions this stream has
-exports.getSubscriptions = stream.subscriptions(
+exports.getSubscriptions = function getSubscriptions() {
+  stream.subscriptions(
     function(err, subscriptions, limit) {
         if (recvdCount < 5){
             recvdCount++;
@@ -25,7 +26,8 @@ exports.getSubscriptions = stream.subscriptions(
             console.log("Done with getting subscriptions\n\n\n");
         }
     }
-);
+  );
+};
 
 // Delete the subscriptions this stream has
 exports.deleteAllSubscriptions = stream.del_subscription(
