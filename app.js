@@ -72,7 +72,7 @@ stream.subscribe({
 var hsm = function handleStreamingMessages(jsonData){
     var today = new Date(),
         feedQuery = null,
-        feed = null;
+        todayfeed = null;
     today.setHours(6,0,0,0);
     if(today > new Date()){
         feedQuery = DailyFeed.findOne({'created': {"$gte": new Date(today.getTime() - (24 * 60 * 60 * 1000)), "$lt": today} });
@@ -86,10 +86,10 @@ var hsm = function handleStreamingMessages(jsonData){
                 if(!feed){
                     var newFeed = new DailyFeed({messages: [], created: Date.now() });
                     newFeed.save(function(err, fd){
-                        feed = fd;
+                        todayfeed = fd.id;
                     });
                 } else {
-                    feed = fd;
+                    todayfeed = fd.id;
                 }
                 callback();
             });
@@ -106,10 +106,10 @@ var hsm = function handleStreamingMessages(jsonData){
                                 if(!establishment){
                                     var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
                                     newEst.save(function(err,establ){
-                                        est = establ;
+                                        est = establ.id;
                                     });
                                 } else {
-                                    est = establishment;
+                                    est = establishment.id;
                                 }
                                 callback();
                             });
@@ -121,7 +121,7 @@ var hsm = function handleStreamingMessages(jsonData){
                             if(err) return handleError(err);
                             if(!msg){
                                 var newMsg = new Message({
-                                dailyFeed: feed.id,
+                                dailyFeed: todayfeed,
                                 created: (media.created_time * 1000),
                                 userpic: media.user.profile_picture,
                                 hashtags: media.tags,
