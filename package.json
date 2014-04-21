@@ -16,7 +16,8 @@
     "jade": "~1.3.0",
     "socket.io": "latest",
     "mongoose": "3.8.8",
-    "instagram-realtime": "0.0.4"
+    "instagram-realtime": "0.0.4",
+    "instagram-node": "0.2.3"
   },
   "description": "This is a socket test",
   "main": "app.js",
