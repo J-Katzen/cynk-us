@@ -30,9 +30,11 @@ exports.getSubscriptions = function getSubscriptions() {
 };
 
 // Delete the subscriptions this stream has
-exports.deleteAllSubscriptions = stream.del_subscription(
+exports.deleteAllSubscriptions = function deleteAllSubscriptions() {
+  stream.del_subscription(
     {all: true}, 
     function(err, subscriptions, limit) {
         console.log("Deleted Subscriptions");
     }
-);
+  );
+};
