@@ -89,7 +89,7 @@ var hsm = function handleStreamingMessages(jsonData){
                         todayfeed = fd.id;
                     });
                 } else {
-                    todayfeed = fd.id;
+                    todayfeed = feed.id;
                 }
                 callback();
             });
