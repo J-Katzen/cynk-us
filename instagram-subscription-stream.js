@@ -79,8 +79,8 @@ var hsm = function handleStreamingMessages(jsonData){
                                 username: media.user.username,
                                 type: media.type,
                                 link: media.link,
-                                standard: media.images.standard_resolution,
-                                thumb: media.images.thumbnail,
+                                standard: media.images.standard_resolution.url,
+                                thumb: media.images.thumbnail.url,
                                 instagramId: media.id
                                 });
                                 if(todayfeed)
@@ -96,6 +96,7 @@ var hsm = function handleStreamingMessages(jsonData){
                                 newMsg.save(function(err,savedMsg){
                                     if(err) {
                                         console.log(err);
+                                        Message.update({instagramId: media.id}, {standard: media.images.standard_resolution.url, thumb: media.images.thumbnail.url}).exec();
                                     } 
                                         // return handleError(err);
                                     console.log(savedMsg);
