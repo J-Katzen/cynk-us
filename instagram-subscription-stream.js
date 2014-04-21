@@ -186,6 +186,7 @@ function initSubscriptions(test) {
     stream.subscribe({ location : 1397980572 }); // Silver Cloud
 
     stream.subscribe({ tag: 'sfnight' });
+    stream.subscribe({ tag: 'sanfrancisco'});
     //stream.subscribe({ tag: 'goodnight' });
     console.log(test);
 };
