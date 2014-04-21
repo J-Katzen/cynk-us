@@ -149,7 +149,8 @@ var hsm = function handleStreamingMessages(jsonData){
                                 if(media.caption !== null)
                                     newMsg.set('message', media.caption.text);
                                 newMsg.save(function(err,savedMsg){
-                                    if(err) return handleError(err);
+                                    if(err) {}
+                                        // return handleError(err);
                                     console.log(savedMsg);
                                 });
                             }
