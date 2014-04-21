@@ -1,5 +1,5 @@
 {
-  "name": "socket-test",
+  "name": "cync",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -17,14 +17,15 @@
     "socket.io": "latest",
     "mongoose": "3.8.8",
     "instagram-realtime": "0.0.4",
-    "instagram-node": "0.2.3"
+    "instagram-node": "0.2.3",
+    "async": "0.7.0"
   },
   "description": "This is a socket test",
   "main": "app.js",
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git@heroku.com:mighty-dawn-2122.git"
+    "url": "git@heroku.com:cync-us.git"
   },
   "keywords": [
     "socket",
