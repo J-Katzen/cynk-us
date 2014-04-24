@@ -2,7 +2,6 @@ var env                 =   process.env.NODE_ENV || 'development'
     express             =   require('express'),
     favicon             =   require('static-favicon'),
     logger              =   require('morgan'),
-    mongoose            =   require('mongoose'),
     bodyParser          =   require('body-parser'),
     cookieParser        =   require('cookie-parser'),
     methodOverride      =   require('method-override'),
@@ -14,7 +13,7 @@ var env                 =   process.env.NODE_ENV || 'development'
 global.App = {
     app: express(),
     port: process.env.PORT || 5000,
-    database: process.env.MONGOHQ_URL || 'mongodb://localhost/cynkus',
+    databaseURL: process.env.MONGOHQ_URL || 'mongodb://localhost/cynkus',
     version: packageJson.version,
     root: path.join(__dirname, ''), //NOTE: In case we move this file elsewhere: path.join(__dirname, '..'),
     appPath: function(path) {
@@ -26,7 +25,6 @@ global.App = {
     env: env,
     start: function() {
         if (!this.started) {
-            mongoose.connect(this.database);
             this.started = true
             this.server = this.app.listen(this.port)
             console.log("Running App Version " + App.version + " on port " + App.port + " in " + App.env + " mode")
@@ -41,7 +39,6 @@ global.App = {
     utils: function(path) {
         return this.require('app/utils/' + path)
     }
-
 }
 
 // Start this thang
@@ -107,5 +104,6 @@ App.app.use(function(err, req, res, next) {
 
 
 App.require('config/routes')(App.app)
+App.require('config/database')(App.databaseURL)
 
 module.exports = App.app;
