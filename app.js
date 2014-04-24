@@ -5,20 +5,18 @@ var env                 =   process.env.NODE_ENV || 'development'
     mongoose            =   require('mongoose'),
     bodyParser          =   require('body-parser'),
     cookieParser        =   require('cookie-parser'),
-    routes              =   require('./routes'),
     methodOverride      =   require('method-override'),
-    instagramStream     =   require('./instagram-subscription-stream'),
-    igStreamer          =   require('./ig-streamer'),
     http                =   require('http'),
     packageJson         =   require('./package.json'),
     path                =   require('path');
 
+// Set our Global Vars
 global.App = {
     app: express(),
     port: process.env.PORT || 5000,
     database: process.env.MONGOHQ_URL || 'mongodb://localhost/cynkus',
     version: packageJson.version,
-    root: path.join(__dirname, '..'),
+    root: path.join(__dirname, ''), //NOTE: In case we move this file elsewhere: path.join(__dirname, '..'),
     appPath: function(path) {
         return this.root + '/' + path
     },
@@ -35,13 +33,23 @@ global.App = {
         }
     },
     route: function(path) {
-        return this.requre('app/routes/' + path)
+        return this.require('app/routes/' + path)
+    },
+    model: function(path) {
+        return this.require('app/models/' + path)
+    },
+    utils: function(path) {
+        return this.require('app/utils/' + path)
     }
 
 }
 
 // Start this thang
 App.start()
+
+// Load our custom Instagram Stream Modules
+var instagramStream     =   App.utils('instagram-subscription-stream');
+var igStreamer          =   App.utils('ig-streamer');
 
 // Tells socket.io to user our express server
 var io      =   require('socket.io').listen(App.server);
@@ -63,8 +71,7 @@ App.app.set('view engine', 'jade');
 App.app.use(favicon());
 App.app.use(bodyParser.urlencoded());
 App.app.use(methodOverride());
-App.app.use('/', routes);
-App.app.use('/dailyfeeds', routes);
+
 App.app.use(express.static(App.appPath('public')));
 
 /// catch 404 and forwarding to error handler
@@ -97,5 +104,8 @@ App.app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+
+App.require('config/routes')(App.app)
 
 module.exports = App.app;

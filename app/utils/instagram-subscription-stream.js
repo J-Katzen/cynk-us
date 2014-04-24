@@ -1,8 +1,8 @@
 // Variable dependencies/declarations
-var Establishment       = require('./models/establishment');
-var DailyFeed           = require('./models/dailyfeed');
-var Message             = require('./models/message');
-var InstagramStream     = require('instagram-realtime');
+var Establishment       =   App.model('establishment');
+var DailyFeed           =   App.model('dailyfeed');
+var Message             =   App.model('message');
+var InstagramStream     =   require('instagram-realtime');
 
 var async   =   require('async');
 var test    =   0;
