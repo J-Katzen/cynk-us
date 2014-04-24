@@ -36,29 +36,10 @@ global.App = {
     model: function(path) {
         return this.require('app/models/' + path)
     },
-    utils: function(path) {
+    util: function(path) {
         return this.require('app/utils/' + path)
     }
 }
-
-// Start this thang
-App.start()
-
-// Load our custom Instagram Stream Modules
-var instagramStream     =   App.utils('instagram-subscription-stream');
-var igStreamer          =   App.utils('ig-streamer');
-
-// Tells socket.io to user our express server
-var io      =   require('socket.io').listen(App.server);
-
-// Create instagram stream
-instagramStream.initStream(App.server);
-
-// SocketIO server
-io.sockets.on('connection', function(socket) {
-    // fill in with websocket and instagram streaming stuff
-});
-
 
 // App Templating Engine
 App.app.set('views', __dirname + '/views');
@@ -102,8 +83,7 @@ App.app.use(function(err, req, res, next) {
     });
 });
 
-
 App.require('config/routes')(App.app)
 App.require('config/database')(App.databaseURL)
 
-module.exports = App.app;
+console.log("Done")
