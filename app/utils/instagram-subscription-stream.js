@@ -22,7 +22,8 @@ var hsm = function handleStreamingMessages(jsonData){
         function(callback){
             feedQuery.exec(function(err, feed){
                 if(err) {
-                 //handleError(err);   
+                    console.log(err);
+                    callback();
                 }
                 if(!feed){
                     var newFeed = new DailyFeed({messages: [], created: Date.now() });
@@ -38,14 +39,18 @@ var hsm = function handleStreamingMessages(jsonData){
             });
         },
         function(callback){
+            var est = null;
             jsonData.forEach(function(media){
-                var est = null;
+                est = null;
                 async.series([
                     function(callback){
                         if(media.location && media.location.id){
                             var estQuery = Establishment.findOne({'instagramId': media.location.id });
                             estQuery.exec(function(err,establishment){
-                                if(err) {}
+                                if(err) {
+                                    console.log(err);
+                                    callback();
+                                }
                                     // return handleError(err);
                                 if(!establishment){
                                     var newEst = new Establishment({name: media.location.name, instagramId: media.location.id, latitude: media.location.latitude, longitude: media.location.longitude});
@@ -57,14 +62,17 @@ var hsm = function handleStreamingMessages(jsonData){
                                     est = establishment.id;
                                     console.log(est);
                                 }
-                                callback();
                             });
                         }
+                        callback();
                     },
                     function(callback){
                         var msgQuery = Message.findOne({'instagramid': media.id});
                         msgQuery.exec(function(err, msg){
-                            if(err) {} 
+                            if(err) {
+                                console.log(err);
+                                callback();
+                            } 
                                 // return handleError(err);
                             if(!msg){
                                 var newMsg = new Message({
@@ -75,22 +83,32 @@ var hsm = function handleStreamingMessages(jsonData){
                                 username: media.user.username,
                                 type: media.type,
                                 link: media.link,
-                                standard: media.images.standard_resolution,
-                                thumb: media.images.thumbnail,
+                                standard: media.images.standard_resolution.url,
+                                thumb: media.images.thumbnail.url,
                                 instagramId: media.id
                                 });
-                                if(todayfeed !== null)
+                                if(todayfeed)
                                     newMsg.set('dailyFeed', todayfeed);
-                                if(media.location !== null)
+                                if(media.location){
+                                    console.log(media.location);
                                     newMsg.set('geoloc', {longitude: media.location.longitude, latitude: media.location.latitude});
-                                if(est !== null)
+                                }
+                                if(est)
                                     newMsg.set('establishment', est);
                                 if(media.caption !== null)
                                     newMsg.set('message', media.caption.text);
                                 newMsg.save(function(err,savedMsg){
-                                    if(err) return handleError(err);
+                                    if(err) {
+                                        console.log(err);
+                                        Message.update({instagramId: media.id}, {standard: media.images.standard_resolution.url, thumb: media.images.thumbnail.url}).exec();
+                                        callback();
+                                    } 
+                                        // return handleError(err);
                                     console.log(savedMsg);
                                 });
+                            } else {
+                                console.log('updates');
+                                Message.update({instagramId: media.id}, {standard: media.images.standard_resolution.url, thumb: media.images.thumbnail.url}).exec();
                             }
                             callback();
                         });
@@ -123,6 +141,7 @@ function setStreamTriggers() {
 
     stream.on('new/error', function(response, body) {
         console.log("New Media Error");
+        console.log(body);
     });
 
     stream.on('subscribe', function(response, body) {
@@ -167,7 +186,8 @@ function initSubscriptions(test) {
     stream.subscribe({ location : 1397980572 }); // Silver Cloud
 
     stream.subscribe({ tag: 'sfnight' });
-    stream.subscribe({ tag: 'goodnight' });
+    stream.subscribe({ tag: 'sanfrancisco'});
+    //stream.subscribe({ tag: 'goodnight' });
     console.log(test);
 };
 

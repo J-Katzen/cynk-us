@@ -3,7 +3,7 @@ var stream      =   require('instagram-node').instagram(),
 var redirectUri;
 
 // Initialize Instagram API Connection
-function initStream(){
+exports.initStream = function initStream() {
   
   // Set Instagram API Credentials
   stream.use({
@@ -13,10 +13,11 @@ function initStream(){
 
   redirectUri = 'http://http://cynk-us.herokuapp.com/subscription';
 
-}
+};
 
 // Get the subscriptions this stream has
-exports.getSubscriptions = stream.subscriptions(
+exports.getSubscriptions = function getSubscriptions() {
+  stream.subscriptions(
     function(err, subscriptions, limit) {
         if (recvdCount < 5){
             recvdCount++;
@@ -25,12 +26,15 @@ exports.getSubscriptions = stream.subscriptions(
             console.log("Done with getting subscriptions\n\n\n");
         }
     }
-);
+  );
+};
 
 // Delete the subscriptions this stream has
-exports.deleteAllSubscriptions = stream.del_subscription(
+exports.deleteAllSubscriptions = function deleteAllSubscriptions() {
+  stream.del_subscription(
     {all: true}, 
     function(err, subscriptions, limit) {
         console.log("Deleted Subscriptions");
     }
-);
+  );
+};
